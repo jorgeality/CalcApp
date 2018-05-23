@@ -2,6 +2,7 @@ package co.edu.unitecnologica.networkcalcapp_t00032825
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.github.kittinunf.*
 import com.github.kittinunf.fuel.Fuel
@@ -16,6 +17,9 @@ import org.json.JSONObject
 class MainActivity : AppCompatActivity() {
 
 
+    /**
+     * variable que hacen referencia ael json que se va a formar para hacer el post
+     */
     var operacion: String = ""
     var num1: Double = 0.0
     var num2: Double = 0.0
@@ -29,7 +33,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    /**
+     * los metodos con nombre de numero de encargan de leer la informacion que se escribe en el campo de texto
+     * y concatenarla al numero que se escribe al presionar el boton.
+     */
 
     fun numero1(View:View){
 
@@ -72,6 +79,10 @@ class MainActivity : AppCompatActivity() {
         val resultado: String = Pantalla.text.toString()
         Pantalla.setText(resultado+"0")
     }
+
+    /**
+     * los metodos de operaciones en primera instancia leen el campo de texto, le asignan el valor a la variable num1, a la variable operacion le asignan el valor de la operacion y luego borran el campo de texto
+     */
     fun suma(View:View){
 
         num1 = Pantalla.text.toString().toDouble()
@@ -82,7 +93,7 @@ class MainActivity : AppCompatActivity() {
     fun resta(View:View){
         num1 = Pantalla.text.toString().toDouble()
         operacion ="res"
-        Pantalla.setText("")
+        Pantalla.setText(num1.toString())
     }
     fun multiplicacion(View:View){
         num1 = Pantalla.text.toString().toDouble()
@@ -98,14 +109,31 @@ class MainActivity : AppCompatActivity() {
         val resultado: String = Pantalla.text.toString()
         Pantalla.setText(resultado+".")
     }
+
+    /**
+     * la funcion igual primero le asigna el valor ala variable num2 que la toma del  capmpo de texto pantalla y posteriormente hace la operacion
+     */
     fun igual(View:View){
         num2 = Pantalla.text.toString().toDouble()
         val resulta: String = respuestas.text.toString()
-        Fuel.Companion.post("http://parcial.getsandbox.com/operation", listOf("operation" to operacion, "num1" to num1 , "num2" to num2))
-                .responseJson { request, response, result ->
+        //val url = "http://parcial.getsandbox.com/operation"
+          try {
+              Fuel.Companion.post("http://parcial.getsandbox.com/operation", listOf("operation" to operacion, "num1" to num1, "num2" to num2))
+                      .responseJson { request, response, result ->
 
-                    respuestas.text = resulta + "\n" + result.get().content
+                          respuestas.text = resulta + "\n" + result.get().content
 
-                }
+                      }
+          }catch(e: Exception){
+
+                      respuestas.text = e.message
+          }
     }
+
+
+
+
+
+
+
 }
