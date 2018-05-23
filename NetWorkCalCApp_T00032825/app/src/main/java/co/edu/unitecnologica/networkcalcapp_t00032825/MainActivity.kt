@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                       }
           }catch(e: Exception){
 
-                      respuestas.text = e.message
+                      respuestas.text = "error: " +e.message
           }
     }
 
